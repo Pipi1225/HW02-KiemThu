@@ -1,0 +1,11 @@
+Pool A — Authentication, Categories, and Products
+FR-04: Personal profile management
+
+Pool B — Shopping Cart and Checkout
+FR-07: Shopping cart
+
+Pool C — Web Admin
+FR-15: Product management (CRUD)
+
+Pool D — Mobile App - Expo
+FR-20: Hồ sơ cá nhân
