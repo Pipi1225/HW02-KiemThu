@@ -15,9 +15,9 @@
 
 **3. Verdict:** INCOMPLETE
 
-**4. Reasoning:** Các test case do AI tạo đã bao phủ hầu hết các domain cần kiểm tra (happy path các edge cases và cả về bảo mật tài khoản), nhưng vẫn còn thiếu test case kiểm tra ràng buộc về loại ký tự của biến số điện thoại (như `098abc1041` hoặc `098-102-512`) để hoàn toàn đạt được coverage 100%.
+**4. Reasoning:** Các test case do AI tạo đã bao phủ hầu hết các domain cần kiểm tra, bao gồm happy path các edge cases và cả về bảo mật tài khoản theo đặc tả (còn thiếu một số test case như họ tên hoặc địa chỉ không được trống - do ràng buộc không có trong đặc tả nên em bỏ qua), nhưng vẫn còn thiếu test case kiểm tra ràng buộc về loại ký tự của biến số điện thoại (như `098abc1041` hoặc `098-102-512`) để hoàn toàn đạt được coverage 100%.
 
-**5. Student Fix:** Bổ sung thêm test case TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt để bao phủ toàn bộ.
+**5. Student Fix:** Bổ sung thêm test case TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt để bao phủ toàn bộ theo đặc tả.
 
 ### Artifact 2: 
 **1. Prompt + Tool**
