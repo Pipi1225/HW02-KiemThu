@@ -19,7 +19,7 @@
 - Các test case do AI tạo đã bao phủ hầu hết các domain cần kiểm tra, bao gồm happy path các edge cases và cả về bảo mật tài khoản theo đặc tả nhưng vẫn chưa đạt được coverage 100%, do vẫn còn thiếu test case kiểm tra ràng buộc về loại ký tự của biến số điện thoại (như `098abc1041` hoặc `098-102-512`) và kiểm tra dữ liệu rỗng đối với trường SĐT
 - AI đã đề xuất một kịch bản kiểm tra bảo mật (thay đổi user id trong request payload để cập nhật hồ sơ tài khoản khác) nhưng test case không khả thi đối với hệ thống hiện tại, do backend thực hiện xác thực user bằng cách giải mã trực tiếp từ token JWT gửi lên qua header.
 
-**5. Student Fix:** Bổ sung thêm 2 test cases `TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt` và `TC_FR04_07: Báo lỗi khi bỏ trống SĐT` để bao phủ toàn bộ theo đặc tả và loại bỏ test case kiểm tra cập nhật chéo tài khoản của AI do kiến trúc dùng JWT.
+**5. Student Fix:** Bổ sung thêm 2 test cases `TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt` và `TC_FR04_07: Báo lỗi khi bỏ trống SĐT` để bao phủ toàn bộ theo đặc tả và loại bỏ (bỏ qua) test case `TC_FR04_10: kiểm tra cập nhật chéo tài khoản` của AI do kiến trúc dùng JWT.
 
 ### Artifact 2: 
 **1. Prompt + Tool**
