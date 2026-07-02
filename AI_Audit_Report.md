@@ -23,11 +23,11 @@
 
 ### Artifact 2: 
 **1. Prompt + Tool**
-- **Tool:** 
-- **Timestamp:** 
-- **Prompt:**
+- **Tool:** Gemini 3.1 Pro
+- **Timestamp:** 16:08 01/07/2026
+- **Prompt:** Yêu cầu thiết kế kịch bản kiểm thử cho tính năng Giỏ hàng (FR-07) bao gồm hiển thị danh sách, thêm/xóa/sửa số lượng sản phẩm, kiểm tra nhãn tổng tiền và trạng thái giỏ hàng trống dựa trên điều kiện context.
 
-**2. AI Output:**
+**2. AI Output:** Đã tạo 9 Test Cases bao phủ các luồng xử lý và giao diện bằng việc áp dụng kỹ thuật Phân tích Miền (Domain Testing) để kiểm tra các trạng thái hợp lệ/không hợp lệ và Phân tích Giá trị biên (BVA) cho biến số lượng (Min = 1).
 
 **3. Verdict:**
 

@@ -14,7 +14,7 @@
 | **Role (Quyền hạn)** | Trạng thái giữ nguyên, không thể thay đổi | Có thể thay đổi giá trị thuộc tính role qua giao diện/request |
 
 ### 2. Phân tích Giá trị biên (Boundary Value Analysis)
-Biến định lượng duy nhất được đề cập trong yêu cầu là độ dài của số điện thoại (từ 10 đến 11 chữ số).
+Biến định lượng duy nhất được đề cập trong yêu cầu là **độ dài của số điện thoại** (từ 10 đến 11 chữ số).
 
 | Biến định lượng | Min - 1 | Min | Max | Max + 1 |
 | :--- | :--- | :--- | :--- | :--- |
@@ -45,10 +45,38 @@ Nguyên nhân chính của các thiếu sót này là xuất phát từ việc A
 
 ## Feature 2: FR-07: Giỏ hàng (Shopping Cart)
 ### 1. Phân tích Miền (Domain Analysis)
+| Biến đầu vào / Thuộc tính | Lớp tương đương hợp lệ (Valid) | Lớp tương đương không hợp lệ (Invalid) |
+| :--- | :--- | :--- |
+| **Trạng thái giỏ hàng** | - Giỏ hàng trống (0 sản phẩm)<br>- Giỏ hàng có sản phẩm (>= 1 sản phẩm) | Không có điều kiện loại trừ cụ thể trong context |
+| **Thao tác thêm sản phẩm** | - Thêm sản phẩm chưa tồn tại trong giỏ<br>- Thêm sản phẩm đã tồn tại trong giỏ | Không có điều kiện loại trừ cụ thể trong context |
+| **Thao tác xóa sản phẩm** | - Xác nhận "Đồng ý" trên Dialog<br>- Xác nhận "Hủy" trên Dialog | Không có điều kiện loại trừ cụ thể trong context |
+| **Nhãn hiển thị tổng tiền** | - Hiển thị nhãn "Tổng cộng" | - Hiển thị nhãn "Tổng tạm tính"<br>- Hiển thị bất kỳ nhãn nào khác "Tổng cộng" |
 
 ### 2. Phân tích Giá trị biên (Boundary Value Analysis)
+Biến định lượng duy nhất được xác định trong context là **số lượng (Quantity)** của một sản phẩm trong giỏ hàng (thao tác thông qua nút +/-). Do context không quy định giới hạn tối đa (Max), các giá trị biên chỉ được áp dụng cho giới hạn tối thiểu (Min = 1).
+
+| Biến định lượng | Min - 1 | Min | Max | Max + 1 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Số lượng của một sản phẩm** | 0 | 1 | N/A | N/A |
 
 ### 3. Kịch bản kiểm thử (Test Cases)
+| Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result / Note | Verdict |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **TC_FR07_01** | Kiểm tra hiển thị khi giỏ hàng trống | Người dùng truy cập vào giỏ hàng và chưa chọn mua bất kỳ sản phẩm nào. | 1. Đi đến trang Giỏ hàng. | - Hiển thị hình minh họa giỏ hàng trống.<br>- Hiển thị thông báo rõ ràng về trạng thái giỏ hàng trống. |  |  |
+| **TC_FR07_02** | Kiểm tra hiển thị danh sách các cột khi có sản phẩm | Giỏ hàng đã có ít nhất một sản phẩm. | 1. Đi đến trang Giỏ hàng.<br>2. Kiểm tra các cột trong bảng danh sách sản phẩm. | - Hiển thị danh sách sản phẩm với đầy đủ các cột: Sản phẩm, Đơn giá, Số lượng, Thành tiền, Thao tác.<br>- Cột Số lượng phải có nút `+` và `-` để chỉnh sửa. |  |  |
+| **TC_FR07_03** | Kiểm tra nhãn hiển thị của Tổng tiền | Giỏ hàng đang có sản phẩm. | 1. Đi đến trang Giỏ hàng.<br>2. Quan sát phần hiển thị tổng số tiền phải thanh toán. | - Nhãn hiển thị chính xác từ: "Tổng cộng".<br>- KHÔNG hiển thị từ "Tổng tạm tính". |  |  |
+| **TC_FR07_04** | Kiểm tra thêm cùng một sản phẩm đã có trong giỏ hàng | Giỏ hàng đang có sản phẩm A với Số lượng là 1. | 1. Quay lại trang danh sách sản phẩm.<br>2. Thực hiện thêm sản phẩm A vào giỏ một lần nữa.<br>3. Đi đến trang Giỏ hàng kiểm tra. | - Hệ thống không tạo thêm dòng mới cho sản phẩm A.<br>- Số lượng của sản phẩm A tăng lên thành 2.<br>- Giá trị Thành tiền và Tổng cộng được cập nhật tăng tương ứng. |  |  |
+| **TC_FR07_05** | Kiểm tra tăng số lượng sản phẩm bằng nút [+] | Giỏ hàng đang có sản phẩm A với Số lượng là 1. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút `+` tại cột Số lượng của sản phẩm A. | - Số lượng sản phẩm A tăng lên thành 2.<br>- Giá trị Thành tiền và Tổng cộng tự động cập nhật chính xác. |  |  |
+| **TC_FR07_06** | Kiểm tra giảm số lượng sản phẩm bằng nút [-] (Giá trị Min) | Giỏ hàng đang có sản phẩm A với Số lượng là 2. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút `-` tại cột Số lượng của sản phẩm A để giảm về 1. | - Số lượng sản phẩm A giảm xuống còn 1 (Giá trị Min).<br>- Giá trị Thành tiền và Tổng cộng tự động cập nhật chính xác. |  |  |
+| **TC_FR07_07** | Kiểm tra nhấn nút [-] khi số lượng đang ở mức tối thiểu (Giá trị Biên Min - 1) | Giỏ hàng đang có sản phẩm A với Số lượng là 1. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút `-` tại cột Số lượng của sản phẩm A. | - Hệ thống không cho phép giảm số lượng xuống 0 (Hoặc hiển thị dialog xác nhận xóa sản phẩm tùy theo hành vi xử lý biên của hệ thống). |  |  |
+| **TC_FR07_08** | Kiểm tra hủy thao tác xóa sản phẩm qua Dialog xác nhận | Giỏ hàng đang có sản phẩm A. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút Xóa tại cột Thao tác của sản phẩm A.<br>3. Trên Dialog xác nhận xuất hiện, nhấn nút "Hủy". | - Xuất hiện Dialog xác nhận trước khi thực hiện xóa.<br>- Khi nhấn "Hủy", Dialog đóng lại.<br>- Sản phẩm A không bị xóa và vẫn giữ nguyên trong giỏ hàng. |  |  |
+| **TC_FR07_09** | Kiểm tra đồng ý xóa sản phẩm qua Dialog xác nhận | Giỏ hàng đang có sản phẩm A. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút Xóa tại cột Thao tác của sản phẩm A.<br>3. Trên Dialog xác nhận xuất hiện, nhấn nút "Đồng ý/Xác nhận". | - Xuất hiện Dialog xác nhận trước khi thực hiện xóa.<br>- Khi nhấn "Đồng ý/Xác nhận", Dialog đóng lại.<br>- Sản phẩm A bị xóa hoàn toàn khỏi danh sách giỏ hàng.<br>- Giá trị Tổng cộng được tính toán lại chính xác. |  |  |
+| **TC_FR07_10** | Kiểm tra chức năng của nút "Tiếp tục mua sắm" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang trống. | 1. Nhấn vào nút "Tiếp tục mua sắm". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. |  |  |
+| **TC_FR07_11** | Kiểm tra chức năng của nút "Mua tiếp" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn vào nút "← Mua tiếp". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. |  |  |
+| **TC_FR08_12** | Kiểm tra tính nhất quán trạng thái của giỏ hàng | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn nút refresh trên thanh công cụ (hoặc F5) | Giỏ hàng phải giữ nguyên trạng thái và số lượng các sản phẩm như trước khi Refresh trang |  |  |
+
+### 4. AI Gap Analysis
+
 
 ## Feature 3: FR-15: Product management (CRUD)
 ### 1. Phân tích Miền (Domain Analysis)
@@ -57,9 +85,14 @@ Nguyên nhân chính của các thiếu sót này là xuất phát từ việc A
 
 ### 3. Kịch bản kiểm thử (Test Cases)
 
+### 4. AI Gap Analysis
+
+
 ## Feature 4: FR-20: Hồ sơ cá nhân (FR-04 - Mobile)
 ### 1. Phân tích Miền (Domain Analysis)
 
 ### 2. Phân tích Giá trị biên (Boundary Value Analysis)
 
 ### 3. Kịch bản kiểm thử (Test Cases)
+
+### 4. AI Gap Analysis
