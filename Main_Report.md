@@ -57,7 +57,7 @@ Biến định lượng duy nhất được xác định trong context là **s�
 
 | Biến định lượng | Min - 1 | Min | Max | Max + 1 |
 | :--- | :--- | :--- | :--- | :--- |
-| **Số lượng của một sản phẩm** | 0 | 1 | N/A | N/A |
+| **Số lượng của một sản phẩm** | 0 (Invalid) | 1 (Valid) | N/A | N/A |
 
 ### 3. Kịch bản kiểm thử (Test Cases)
 | Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result / Note | Verdict |
@@ -73,7 +73,8 @@ Biến định lượng duy nhất được xác định trong context là **s�
 | **TC_FR07_09** | Kiểm tra đồng ý xóa sản phẩm qua Dialog xác nhận | Giỏ hàng đang có sản phẩm A. | 1. Đi đến trang Giỏ hàng.<br>2. Nhấn vào nút Xóa tại cột Thao tác của sản phẩm A.<br>3. Trên Dialog xác nhận xuất hiện, nhấn nút "Đồng ý/Xác nhận". | - Xuất hiện Dialog xác nhận trước khi thực hiện xóa.<br>- Khi nhấn "Đồng ý/Xác nhận", Dialog đóng lại.<br>- Sản phẩm A bị xóa hoàn toàn khỏi danh sách giỏ hàng.<br>- Giá trị Tổng cộng được tính toán lại chính xác. | Sau khi ấn nút `Xóa` tại cột Thao tác của sản phẩm A, sản phẩm A bị xóa ngay lập tức mà không có Dialog xác nhận | Fail |
 | **TC_FR07_10** | Kiểm tra chức năng của nút "Tiếp tục mua sắm" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang trống. | 1. Nhấn vào nút "Tiếp tục mua sắm". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. | Sau khi nhấn nút vào nút "Tiếp tục mua sắm", hệ thống điều hướng người dùng quay trở về Trang chủ | Pass |
 | **TC_FR07_11** | Kiểm tra chức năng của nút "Mua tiếp" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn vào nút "← Mua tiếp". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. | Sau khi nhấn nút vào nút "Mua tiếp", hệ thống điều hướng người dùng quay trở về Trang chủ | Pass |
-| **TC_FR07_12** | Kiểm tra tính nhất quán trạng thái của giỏ hàng | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn nút refresh trên thanh công cụ (hoặc F5) | Giỏ hàng phải giữ nguyên trạng thái và số lượng các sản phẩm như trước khi Refresh trang | Sau khi nhấn nút refresh trang (F5), giỏ hàng mất hết toàn bộ sản phẩm, biến thành giỏ hàng trống. | Fail |
+| **TC_FR07_12** | Kiểm tra tính nhất quán trạng thái của giỏ hàng | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn nút refresh trên thanh công cụ (hoặc F5) | Giỏ hàng phải giữ nguyên trạng thái và số lượng các sản phẩm như trước khi Refresh trang. | Sau khi nhấn nút refresh trang (F5), giỏ hàng mất hết toàn bộ sản phẩm, biến thành giỏ hàng trống. | Fail |
+| **TC_FR07_13** | Giao diện và API cho phép người dùng nhập và lưu số lượng sản phẩm là số âm | Người dùng đang ở trang chi tiết Sản phẩm bất kỳ và giỏ hàng đang trống. | 1. Nhập số âm bất kỳ vào mục Số lượng ở trang chi tiết Sản phẩm (Ví dụ: `-5`)<br>2. Nhấn nút "Thêm vào giỏ hàng" | - Hệ thống phải từ chối hoặc ngăn chặn người dùng thêm vào ở giao diện, phải có thông báo rõ ràng cho người dùng biết.<br>- Hoặc khi người dùng nhập dấu trừ `-` ô nhập liệu phải chặn hoặc tự động khôi phục giá trị về số `1`. | Hệ thống chấp nhận số lượng âm và đưa vào Giỏ hàng bình thường, cột Thành tiền và Tổng cộng bị tính ra số âm. | Fail |
 
 ### 4. AI Gap Analysis
 

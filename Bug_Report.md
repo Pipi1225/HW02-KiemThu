@@ -117,7 +117,7 @@ Theo đặc tả hệ thống (FR-07), thao tác "Xóa sản phẩm" khỏi Gi�
 - **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/58
 - **Ảnh minh chứng (Screenshots):**
 ![Screenshot 1 - Bug 9](images/TC_FR07_5_1.jpg)
-![Screenshot 1 - Bug 9](images/TC_FR07_5_2.jpg)
+![Screenshot 2 - Bug 9](images/TC_FR07_5_2.jpg)
 
 ### Bug 10: Mất toàn bộ dữ liệu giỏ hàng khi làm mới (Refresh/F5) trang
 - **Mô tả Bug:**
@@ -129,16 +129,18 @@ Hệ thống hiện không có cơ chế lưu trữ bền vững (State Persiste
 - **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/59
 - **Ảnh minh chứng (Screenshots):**
 ![Screenshot 1 - Bug 10](images/TC_FR07_6_1.jpg)
-![Screenshot 1 - Bug 10](images/TC_FR07_6_2.jpg)
+![Screenshot 2 - Bug 10](images/TC_FR07_6_2.jpg)
 
-### Bug 11: 
+### Bug 11: Cho phép nhập số lượng sản phẩm là số âm vào Giỏ hàng
 - **Mô tả Bug:**
+Hệ thống hiện đang thiếu hoàn toàn cơ chế xác thực dữ liệu đối với trường Số lượng sản phẩm. Người dùng có thể cố tình nhập một số âm (Ví dụ: `-5`) khi thêm sản phẩm từ trang chi tiết Sản phẩm và hệ thống vẫn chấp nhận đưa sản phẩm đó vào Giỏ hàng.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR07_13`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/61
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 11](images/TC_FR07_7_1.jpg)
 
 ### Bug 12: 
 - **Mô tả Bug:**
@@ -159,6 +161,33 @@ Hệ thống hiện không có cơ chế lưu trữ bền vững (State Persiste
 - **Ảnh minh chứng (Screenshots):**
 
 ### Bug 14: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 15: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 16: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 17: 
 - **Mô tả Bug:**
 
 - **Test Case liên quan:**
