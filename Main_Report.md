@@ -77,6 +77,16 @@ Biến định lượng duy nhất được xác định trong context là **s�
 | **TC_FR07_13** | Giao diện và API cho phép người dùng nhập và lưu số lượng sản phẩm là số âm | Người dùng đang ở trang chi tiết Sản phẩm bất kỳ và giỏ hàng đang trống. | 1. Nhập số âm bất kỳ vào mục Số lượng ở trang chi tiết Sản phẩm (Ví dụ: `-5`)<br>2. Nhấn nút "Thêm vào giỏ hàng" | - Hệ thống phải từ chối hoặc ngăn chặn người dùng thêm vào ở giao diện, phải có thông báo rõ ràng cho người dùng biết.<br>- Hoặc khi người dùng nhập dấu trừ `-` ô nhập liệu phải chặn hoặc tự động khôi phục giá trị về số `1`. | Hệ thống chấp nhận số lượng âm và đưa vào Giỏ hàng bình thường, cột Thành tiền và Tổng cộng bị tính ra số âm. | Fail |
 
 ### 4. AI Gap Analysis
+AI đã bao phủ các luồng chính của FR-07 như trạng thái giỏ hàng trống, hiển thị danh sách sản phẩm, nhãn tổng tiền và thao tác xóa/thêm sản phẩm. Tuy nhiên vẫn còn các thiếu sót sau:
+
+1. AI gộp chung thao tác tăng và giảm số lượng vào một test case, làm giảm tính độc lập của kiểm thử và em đã tách thành `TC_FR07_05` và `TC_FR07_06`.
+2. Thiếu test case kiểm tra mất dữ liệu khi refresh trang (F5). Đây là lỗi trạng thái rất phổ biến của giỏ hàng nhưng prompt ban đầu thiên về giao diện nên AI không suy ra được.
+3. Thiếu test case cho số lượng sản phẩm âm từ trang chi tiết sản phẩm mà chỉ bám vào luồng trong giỏ hàng. Nên không phát hiện được input bất thường ở màn hình khác.
+4. Thiếu test case `TC_FR07_11: Kiểm tra chức năng của nút "Mua tiếp"` vì nút này không được nêu trong đặc tả ban đầu, mặc dù là trong thực tế có trên giao diện.
+
+(Bên cạnh đó có một số test case như `TC_FR07_05`, `TC_FR07_06`, `TC_FR07_07` không thể thực hiện được do source code không như đặc tả, nút `+`/`-` không hề tồn tại trong cột Số lượng mặc dù đặc tả có ghi)
+
+Nguyên nhân chính của các thiếu sót này là AI ưu tiên các kiểm thử phần "bề mặt" trong UI thay vì các tình huống trạng thái và kiểm thử xuyên màn hình. Bản tinh chỉnh FR-07 đã khắc phục bằng cách tách kiểm thử số lượng thành hai case riêng và bổ sung thêm `TC_FR07_11`, `TC_FR07_12`, `TC_FR07_13` để đảm bảo bao phủ đầy đủ hơn.
 
 
 ## Feature 3: FR-15: Product management (CRUD)

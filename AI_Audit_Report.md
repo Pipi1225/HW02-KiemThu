@@ -19,7 +19,7 @@
 - Các test case do AI tạo đã bao phủ hầu hết các domain cần kiểm tra, bao gồm happy path các edge cases và cả về bảo mật tài khoản theo đặc tả nhưng vẫn chưa đạt được coverage 100%, do vẫn còn thiếu test case kiểm tra ràng buộc về loại ký tự của biến số điện thoại (như `098abc1041` hoặc `098-102-512`) và kiểm tra dữ liệu rỗng đối với trường SĐT
 - AI đã đề xuất một kịch bản kiểm tra bảo mật (thay đổi user id trong request payload để cập nhật hồ sơ tài khoản khác) nhưng test case không khả thi đối với hệ thống hiện tại, do backend thực hiện xác thực user bằng cách giải mã trực tiếp từ token JWT gửi lên qua header.
 
-**5. Student Fix:** Bổ sung thêm 2 test cases `TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt` và `TC_FR04_07: Báo lỗi khi bỏ trống SĐT` để bao phủ toàn bộ theo đặc tả và loại bỏ (bỏ qua) test case `TC_FR04_10: kiểm tra cập nhật chéo tài khoản` của AI do kiến trúc dùng JWT.
+**5. Student Fix:** Bổ sung thêm 2 test cases `TC_FR04_06: kiểm tra lỗi SĐT chứa ký tự chữ cái hoặc ký tự đặc biệt` và `TC_FR04_07: Báo lỗi khi bỏ trống SĐT` để bao phủ toàn bộ theo đặc tả và loại bỏ (bỏ qua) test case `TC_FR04_10: kiểm tra cập nhật chéo tài khoản` của AI do kiến trúc dùng JWT. Và tinh chỉnh lại phần test steps của `TC_FR04_09: Không thể tự ý thay đổi thuộc tính Role` để thực hiện dễ dàng hơn.
 
 ### Artifact 2: 
 **1. Prompt + Tool**
@@ -29,7 +29,51 @@
 
 **2. AI Output:** Đã tạo 9 Test Cases bao phủ các luồng xử lý và giao diện bằng việc áp dụng kỹ thuật Phân tích Miền (Domain Testing) để kiểm tra các trạng thái hợp lệ/không hợp lệ và Phân tích Giá trị biên (BVA) cho biến số lượng (Min = 1).
 
-**3. Verdict:**
+**3. Verdict:** INCOMPLETE
+
+**4. Reasoning:**
+- Các test case do AI tạo đa phần chỉ tập trung vào giao diện (1 phần là do prompt ràng buộc AI chỉ chú ý tới đặc tả) mà bỏ sót các lỗi kinh điển trong thương mại điện tử (như mất dữ liệu khi refresh trang - F5, thêm vào giỏ hàng với số lượng sản phẩm là số âm từ trang chi tiết sản phẩm). Và thiếu 1 test case (`TC_FR07_11: Kiểm tra chức năng của nút "Mua tiếp"`) do nút "Mua tiếp" không hề được đề cập trong đặc tả nhưng lại có trong giao diện giỏ hàng.
+- Bên cạnh đó còn có 1 test case mà AI vi phạm nguyên tắc kiểm thử độc lập (gộp chung thao tác tăng và giảm số lượng vào một kịch bản).
+
+**5. Student Fix:** Em đã tách ra test case mà AI vi phạm (gộp chung thao tác tăng và giảm số lượng vào một kịch bản) thành 2 test cases riêng biệt `TC_FR07_05` và `TC_FR07_06`, đồng thời bổ sung thêm 3 test cases `TC_FR07_11: Kiểm tra chức năng của nút "Mua tiếp"`, `TC_FR07_12: Kiểm tra tính nhất quán trạng thái của giỏ hàng`, `TC_FR07_13: Giao diện và API cho phép người dùng nhập và lưu số lượng sản phẩm là số âm` để đảm bảo bao phủ đầy đủ và tinh chỉnh lại test steps cho các test cases cho chi tiết hơn.
+
+### Artifact 3: 
+**1. Prompt + Tool**
+- **Tool:** Gemini 3.1 Pro
+- **Timestamp:** 
+- **Prompt:** 
+
+**2. AI Output:** 
+
+**3. Verdict:** 
+
+**4. Reasoning:**
+
+**5. Student Fix:**
+
+### Artifact 4: 
+**1. Prompt + Tool**
+- **Tool:** Gemini 3.1 Pro
+- **Timestamp:** 
+- **Prompt:** 
+
+**2. AI Output:** 
+
+**3. Verdict:** 
+
+**4. Reasoning:**
+
+**5. Student Fix:**
+
+### Artifact 5: 
+**1. Prompt + Tool**
+- **Tool:** Gemini 3.1 Pro
+- **Timestamp:** 
+- **Prompt:** 
+
+**2. AI Output:** 
+
+**3. Verdict:** 
 
 **4. Reasoning:**
 
