@@ -74,7 +74,7 @@ Biến định lượng duy nhất được xác định trong context là **s�
 | **TC_FR07_10** | Kiểm tra chức năng của nút "Tiếp tục mua sắm" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang trống. | 1. Nhấn vào nút "Tiếp tục mua sắm". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. | Sau khi nhấn nút vào nút "Tiếp tục mua sắm", hệ thống điều hướng người dùng quay trở về Trang chủ | Pass |
 | **TC_FR07_11** | Kiểm tra chức năng của nút "Mua tiếp" | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn vào nút "← Mua tiếp". | - Hệ thống điều hướng người dùng quay trở về Trang chủ một cách chính xác. | Sau khi nhấn nút vào nút "Mua tiếp", hệ thống điều hướng người dùng quay trở về Trang chủ | Pass |
 | **TC_FR07_12** | Kiểm tra tính nhất quán trạng thái của giỏ hàng | Người dùng đang ở trang Giỏ hàng và giỏ hàng đang có một sản phẩm. | 1. Nhấn nút refresh trên thanh công cụ (hoặc F5) | Giỏ hàng phải giữ nguyên trạng thái và số lượng các sản phẩm như trước khi Refresh trang. | Sau khi nhấn nút refresh trang (F5), giỏ hàng mất hết toàn bộ sản phẩm, biến thành giỏ hàng trống. | Fail |
-| **TC_FR07_13** | Giao diện và API cho phép người dùng nhập và lưu số lượng sản phẩm là số âm | Người dùng đang ở trang chi tiết Sản phẩm bất kỳ và giỏ hàng đang trống. | 1. Nhập số âm bất kỳ vào mục Số lượng ở trang chi tiết Sản phẩm (Ví dụ: `-5`)<br>2. Nhấn nút "Thêm vào giỏ hàng" | - Hệ thống phải từ chối hoặc ngăn chặn người dùng thêm vào ở giao diện, phải có thông báo rõ ràng cho người dùng biết.<br>- Hoặc khi người dùng nhập dấu trừ `-` ô nhập liệu phải chặn hoặc tự động khôi phục giá trị về số `1`. | Hệ thống chấp nhận số lượng âm và đưa vào Giỏ hàng bình thường, cột Thành tiền và Tổng cộng bị tính ra số âm. | Fail |
+| **TC_FR07_13** | Kiểm tra hệ thống có cho phép số lượng sản phẩm là số âm | Người dùng đang ở trang chi tiết Sản phẩm bất kỳ và giỏ hàng đang trống. | 1. Nhập số âm bất kỳ vào mục Số lượng ở trang chi tiết Sản phẩm (Ví dụ: `-5`)<br>2. Nhấn nút "Thêm vào giỏ hàng" | - Hệ thống phải từ chối hoặc ngăn chặn người dùng thêm vào ở giao diện, phải có thông báo rõ ràng cho người dùng biết.<br>- Hoặc khi người dùng nhập dấu trừ `-` ô nhập liệu phải chặn hoặc tự động khôi phục giá trị về số `1`. | Hệ thống chấp nhận số lượng âm và đưa vào Giỏ hàng bình thường, cột Thành tiền và Tổng cộng bị tính ra số âm. | Fail |
 
 ### 4. AI Gap Analysis
 AI đã bao phủ các luồng chính của FR-07 như trạng thái giỏ hàng trống, hiển thị danh sách sản phẩm, nhãn tổng tiền và thao tác xóa/thêm sản phẩm. Tuy nhiên vẫn còn các thiếu sót sau:
@@ -91,12 +91,44 @@ Nguyên nhân chính của các thiếu sót này là AI ưu tiên các kiểm t
 
 ## Feature 3: FR-15: Product management (CRUD)
 ### 1. Phân tích Miền (Domain Analysis)
+| Biến đầu vào / Thuộc tính | Lớp tương đương hợp lệ (Valid) | Lớp tương đương không hợp lệ (Invalid) |
+| :--- | :--- | :--- |
+| **Tên sản phẩm** | Chứa từ 1 đến 255 ký tự | - Để trống (0 ký tự)<br>- Vượt quá 255 ký tự |
+| **Giá** | Số dương (> 0) | - Để trống<br>- Số bằng 0<br>- Số âm (< 0)<br>- Chứa ký tự đặc biệt (không phải số) |
+| **Danh mục** | Một danh mục hợp lệ từ danh sách có sẵn | Để trống (không chọn) |
 
 ### 2. Phân tích Giá trị biên (Boundary Value Analysis)
+| Biến định lượng | Min - 1 | Min | Max | Max + 1 |
+| :--- | :---: | :---: | :---: | :---: |
+| **Chiều dài Tên sản phẩm** (ký tự) | 0 | 1 | 255 | 256 |
+| **Giá sản phẩm** (giá trị số)* | 0 | 1 | N/A | N/A |
 
 ### 3. Kịch bản kiểm thử (Test Cases)
+| Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result | Verdict |
+| :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+| **TC_FR15_01** | Sản phẩm mới với Tên sản phẩm ở biên Min (1 ký tự) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: "A" (1 ký tự)<br>2. Nhập Giá: 1000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | - Hệ thống lưu thành công.<br>- Sản phẩm "A" hiển thị trong danh sách với đúng thông tin. |  |  |
+| **TC_FR15_02** | Sản phẩm mới với Tên sản phẩm ở biên Max (255 ký tự) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: Chuỗi ngẫu nhiên đúng 255 ký tự<br>2. Nhập Giá: 5000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | - Hệ thống lưu thành công.<br>- Sản phẩm hiển thị trong danh sách mà không bị cắt xén tên. |  |  |
+| **TC_FR15_03** | Báo lỗi khi Tên sản phẩm trống (Min - 1) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Để trống Tên sản phẩm<br>2. Nhập Giá: 1000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi bắt buộc nhập Tên sản phẩm. |  |  |
+| **TC_FR15_04** | Báo lỗi khi Tên sản phẩm vượt quá 255 ký tự (Max + 1) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: Chuỗi ngẫu nhiên 256 ký tự<br>2. Nhập Giá: 1000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi vượt quá giới hạn 255 ký tự. |  |  |
+| **TC_FR15_05** | Báo lỗi khi Giá sản phẩm bằng 0 (Biên Min - 1) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm hợp lệ<br>2. Nhập Giá: 0<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi giá phải lớn hơn 0. |  |  |
+| **TC_FR15_06** | Báo lỗi khi Giá sản phẩm là số âm | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm hợp lệ<br>2. Nhập Giá là 1 số âm (Ví dụ: `-1`)<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi giá phải lớn hơn 0. |  |  |
+| **TC_FR15_07** | Báo lỗi khi bỏ trống Giá sản phẩm | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm hợp lệ<br>2. Bỏ trống trường Giá<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi giá phải lớn hơn 0. |  |  |
+| **TC_FR15_08** | Báo lỗi/ngăn chặn khi nhập ký tự không phải số vào Giá sản phẩm | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm hợp lệ<br>2. Nhập Giá có chứa ký tự không phải số (Ví dụ: `123abc`)<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi giá không được phép chứa ký tự không phải số. Hoặc là hệ thống chặn lại không cho nhập các ký tự khác số.  |  |  |
+| **TC_FR15_09** | Báo lỗi khi không chọn Danh mục | Đăng nhập với quyền Admin, đã xóa hết toàn bộ danh mục trong trang "Danh mục" và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm hợp lệ<br>2. Nhập Giá: 1000<br>3. Không chọn Danh mục<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | Hệ thống chặn hành động lưu và hiển thị thông báo lỗi bắt buộc chọn danh mục. |  |  |
+| **TC_FR15_10** | Kiểm tra hiển thị nút có chức năng Xem chi tiết | Đăng nhập với quyền Admin, có sẵn ít nhất 1 sản phẩm và đang ở trang Sản phẩm. | 1. Kiểm tra các cột ở danh sách các sản phẩm | - Phải tồn tại nút có nội dung "Xem chi tiết".<br>- Hoặc khi nhấn vào biểu tượng sản phẩm, Admin phải xem được thông tin chi tiết của sản phẩm. |  |  |
+| **TC_FR15_11** | Xem chi tiết một sản phẩm | Đăng nhập với quyền Admin, có sẵn ít nhất 1 sản phẩm và đang ở trang Sản phẩm. | 1. Nhấn vào biểu tượng/nút Xem chi tiết của sản phẩm | Hệ thống hiển thị đúng và đầy đủ thông tin: Tên, Giá, Danh mục của sản phẩm được chọn. |  |  |
+| **TC_FR15_12** | Hiển thị ảnh placeholder khi để trống mục URL ảnh | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: "A" (1 ký tự)<br>2. Nhập Giá: 1000<br>3. Chọn Danh mục hợp lệ<br>4. Để trống URL ảnh<br>5. Nhấn "Lưu sản phẩm" | Hệ thống tự động đưa ra 1 ảnh làm placeholder nếu như người dùng không nhập URL ảnh. Hoặc có thuộc tính `alt` để mô tả nội dung ảnh |  |  |
+| **TC_FR15_13** | Cập nhật thông tin sản phẩm và kiểm tra tính độc lập | Đăng nhập với quyền Admin và có sẵn Sản phẩm A và B. | 1. Chọn Sửa Sản phẩm A<br>2. Đổi Tên và Giá thành giá trị hợp lệ mới<br>3. Nhấn "Lưu sản phẩm"<br>4. Kiểm tra lại Sản phẩm A và B | - Sản phẩm A được cập nhật thông tin mới.<br>- Sản phẩm B không có bất kỳ thay đổi nào (giữ nguyên dữ liệu cũ). |  |  |
+| **TC_FR15_14** | Xóa một sản phẩm khỏi hệ thống | Đăng nhập với quyền Admin và có sẵn một sản phẩm. | 1. Nhấn nút Xóa tại sản phẩm muốn xóa<br>2. Xác nhận Xóa (nếu có popup) | Hệ thống xóa thành công. Sản phẩm không còn xuất hiện trong danh sách. |  |  |
 
 ### 4. AI Gap Analysis
+AI đã bao phủ khá tốt phần kiểm thử dữ liệu cốt lõi của FR-15 như biên độ dài Tên sản phẩm, Giá bằng 0 và Giá âm. Tuy nhiên vẫn còn các thiếu sót sau:
+
+1. Thiếu test case kiểm tra sự tồn tại và hoạt động của nút "Xem chi tiết" trên giao diện danh sách sản phẩm.
+2. Bỏ sót trường "URL ảnh" và logic hiển thị ảnh placeholder khi URL bị để trống. Nguyên nhân là AI bám gần như hoàn toàn vào văn bản đặc tả gốc nên không suy ra các trường đã tồn tại trong source code.
+3. AI chưa tách đầy đủ các tình huống invalid của trường Giá thành các nhóm độc lập, đặc biệt là trường hợp bỏ trống và trường hợp số âm, nên độ bao phủ chưa hoàn chỉnh ở lớp tương đương.
+
+Nguyên nhân chính của các thiếu sót này là AI quá thiên về lý thuyết Domain/BVA và phụ thuộc vào phần mô tả trong prompt, trong khi không tự kiểm tra được các chi tiết giao diện hoặc dữ liệu thực tế của màn hình. Bản tinh chỉnh FR-15 đã khắc phục bằng cách tách riêng test case của trường Giá (thành `TC_FR15_06`, `TC_FR15_07`), bổ sung `TC_FR15_08`, `TC_FR15_10`, `TC_FR15_12`, đồng thời chuẩn hóa lại bước thao tác lưu sản phẩm để khớp với giao diện thực tế.
 
 
 ## Feature 4: FR-20: Hồ sơ cá nhân (FR-04 - Mobile)

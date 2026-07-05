@@ -40,16 +40,18 @@
 ### Artifact 3: 
 **1. Prompt + Tool**
 - **Tool:** Gemini 3.1 Pro
-- **Timestamp:** 
-- **Prompt:** 
+- **Timestamp:** 13:19 04/07/2026
+- **Prompt:** Yêu cầu thiết kế kịch bản kiểm thử cho tính năng FR-15: Product management (CRUD) với các ràng buộc về Tên, Giá và Danh mục sản phẩm theo đúng 4 bước quy trình. 
 
-**2. AI Output:** 
+**2. AI Output:** Tạo thành công 9 Test Cases bao phủ các luồng Create, Read, Update, Delete (bao gồm cả Happy path và Edge cases) sử dụng kỹ thuật Kiểm thử Miền (Domain Analysis) và Phân tích Giá trị biên (BVA).
 
-**3. Verdict:** 
+**3. Verdict:** INCOMPLETE
 
-**4. Reasoning:**
+**4. Reasoning:** 
+- Các test case do của AI nhìn chung có nền tảng tốt nhưng chưa hoàn thiện do tiếp cận quá thiên về lý thuyết và phụ thuộc gần như hoàn toàn vào văn bản đặc tả gốc. AI tập trung mạnh vào luồng dữ liệu cốt lõi nhưng bỏ sót các test case về mặt khả dụng của giao diện (ví dụ như chưa kiểm tra sự tồn tại của nút "Xem chi tiết").
+- Nhưng cũng do tuân thủ nguyên tắc không suy diễn ngoài đặc tả trong câu prompt agent skill, AI cũng bỏ qua các trường dữ liệu như "URL ảnh" - vốn tồn tại trong source code và chỉ đưa ra các bước thao tác, tên nút bấm chỉ mang tính chung chung.
 
-**5. Student Fix:**
+**5. Student Fix:** Em đã tái cấu trúc lại các test case bằng cách tách riêng các test case của trường Giá thêm hai nhóm độc lập (trường hợp số âm `TC_FR15_06` và trường hợp bỏ trống `TC_FR15_07`) nhằm tăng độ bao phủ, đồng thời bổ sung các test case về giao diện như `TC_FR15_10: Kiểm tra hiển thị nút có chức năng Xem chi tiết`, logic hiển thị ảnh thay thế (placeholder) khi URL ảnh trống `TC_FR15_12: Hiển thị hình placeholder khi để trống mục URL ảnh` và cũng như là kiểm tra hệ thống phải báo lỗi/ngăn chặn nếu nhập ký tự không phải số vào Giá sản phẩm `TC_FR15_08: Báo lỗi/ngăn chặn khi nhập ký tự không phải số vào Giá sản phẩm`. Cuối cùng, toàn bộ các test steps được bổ sung thêm phần nhập URL ảnh, cũng như các Pre-conditions (Ví dụ thao tác xóa danh mục) và nhãn hiển thị được chuẩn hóa lại (đổi thành "Lưu sản phẩm") để khớp hoàn toàn với thiết kế giao diện thực tế.
 
 ### Artifact 4: 
 **1. Prompt + Tool**
