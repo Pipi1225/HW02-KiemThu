@@ -75,7 +75,7 @@ Theo đặc tả hệ thống (FR-07), khi người dùng truy cập vào giỏ 
 ### Bug 6: Giao diện giỏ hàng thiếu nút tăng/giảm (+/-) tại cột Số lượng sản phẩm trong Giỏ hàng
 - **Mô tả Bug:**
 Theo đặc tả hệ thống (FR-07), cột "Số lượng" trong danh sách sản phẩm bắt buộc phải có kèm theo nút + và - để người dùng có thể điều chỉnh số lượng mua trực tiếp. Tuy nhiên, trên giao diện thực tế hiện tại, cột "Số lượng" hoàn toàn khuyết thiếu hai nút thao tác này (vấn đề tương tự bên giao diện giỏ hàng mobile ở github issues #50 có đề cập). Điều này làm phá vỡ trải nghiệm mua sắm vì người dùng không thể cập nhật số lượng ngay tại giỏ hàng.
-(Lưu ý: Tên cột tiêu đề Đơn giá hiện đang bị render sai thành Giá).
+<br>(Lưu ý: Tên cột tiêu đề Đơn giá hiện đang bị render sai thành Giá).
 
 - **Test Case liên quan:**
     - `TC_FR07_02`
@@ -142,52 +142,100 @@ Hệ thống hiện đang thiếu hoàn toàn cơ chế xác thực dữ liệu 
 - **Ảnh minh chứng (Screenshots):**
 ![Screenshot 1 - Bug 11](images/TC_FR07_7_1.jpg)
 
-### Bug 12: 
+### Bug 12: Cho phép nhập và lưu Tên sản phẩm vượt quá giới hạn tối đa (255 ký tự)
 - **Mô tả Bug:**
+Hệ thống đang thiếu cơ chế kiểm soát giới hạn độ dài đối với trường "Tên sản phẩm". Mặc dù giới hạn chuẩn là 255 ký tự theo đặc tả (FR-15), hệ thống vẫn cho phép người dùng nhập và lưu thành công một chuỗi văn bản dài 256 ký tự (vượt quá Max).
+<br>(Lưu ý: Hiện tại nếu tên sản phẩm quá dài, sẽ bị tình trạng gãy layout).
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR15_04`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/64
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 12](images/TC_FR15_1_1.jpg)
+![Screenshot 2 - Bug 12](images/TC_FR15_1_2.jpg)
 
-### Bug 13: 
+### Bug 13: Thiếu kiểm tra tính hợp lệ của trường Giá sản phẩm (Cho phép lưu giá trị 0, số âm và rỗng)
 - **Mô tả Bug:**
+Theo đặc tả hệ thống (FR-15), khi thêm sản phẩm, trường "Giá sản phẩm" có ràng buộc là bắt buộc nhập và phải là số dương (> 0). Tuy nhiên, hệ thống hiện tại đang thiếu hoàn toàn cơ chế xác thực cho trường dữ liệu này. Người dùng có thể cố ý bỏ trống ô nhập liệu, hoặc nhập các giá trị không hợp lệ như 0 và số âm (vd: -1), nhưng hệ thống vẫn không hề có cơ chế ngăn chặn mà trực tiếp lưu thành công vào cơ sở dữ liệu.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR15_05`
+    - `TC_FR15_06`
+    - `TC_FR15_07`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/65
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 13](images/TC_FR15_2_1.jpg)
+![Screenshot 2 - Bug 13](images/TC_FR15_2_2.jpg)
+![Screenshot 3 - Bug 13](images/TC_FR15_2_3.jpg)
+![Screenshot 4 - Bug 13](images/TC_FR15_2_4.jpg)
 
-### Bug 14: 
+### Bug 14: Cho phép tạo Sản phẩm không thuộc Danh mục nào (Bỏ qua ràng buộc bắt buộc)
 - **Mô tả Bug:**
+Theo đặc tả hệ thống (FR-15), trường "Danh mục" khi tạo/sửa sản phẩm là trường bắt buộc và người dùng phải chọn từ danh sách có sẵn. Tuy nhiên, nếu hệ thống hiện tại không có danh mục nào (bị xóa sạch), hoặc người dùng bằng cách nào đó không chọn danh mục, hệ thống vẫn chấp nhận request và lưu sản phẩm thành công.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR15_09`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/66
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 14](images/TC_FR15_3_1.jpg)
+![Screenshot 2 - Bug 14](images/TC_FR15_3_2.jpg)
+![Screenshot 3 - Bug 14](images/TC_FR15_3_3.jpg)
 
-### Bug 15: 
+### Bug 15: Khuyết thiếu chức năng "Xem chi tiết" (Read) của sản phẩm
 - **Mô tả Bug:**
+Theo tiêu chuẩn quản lý CRUD được quy định trong đặc tả (FR-15), hệ thống cần cung cấp đầy đủ các thao tác cho Admin, bao gồm việc "Xem" thông tin chi tiết của một sản phẩm. Tuy nhiên, trên giao diện danh sách hiện tại hoàn toàn thiếu sót nút "Xem chi tiết" hoặc cơ chế click vào tên/ảnh để xem. Admin đang phải đi đường vòng bằng cách bấm vào nút "Sửa" để xem được các trường dữ liệu đầy đủ.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR15_10`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/67
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 15](images/TC_FR15_4_1.jpg)
 
-### Bug 16: 
+### Bug 16: Lỗi đồng bộ State: Hiển thị sai thông tin toàn bộ danh sách sau khi Sửa một sản phẩm
 - **Mô tả Bug:**
+Khi Admin thực hiện cập nhật thông tin (Tên và Giá) của một sản phẩm bất kỳ, giao diện Frontend xử lý sai logic cập nhật State. Cụ thể, thay vì chỉ cập nhật thông tin cho dòng sản phẩm vừa thao tác, UI lại lấy tên mới áp cho toàn bộ các sản phẩm khác trong danh sách, đồng thời bỏ sót không cập nhật trường Giá. Tuy nhiên, khi tải lại trang (F5), dữ liệu hiển thị lại chính xác như mong đợi. Điều này khẳng định API/Database vẫn xử lý đúng tính độc lập, nhưng lỗi hoàn toàn nằm ở phần đồng bộ dữ liệu sau khi submit form của Client-side.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR15_13`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/68
 - **Ảnh minh chứng (Screenshots):**
+![Screenshot 1 - Bug 16](images/TC_FR15_5_1.jpg)
+![Screenshot 2 - Bug 16](images/TC_FR15_5_2.jpg)
+![Screenshot 3 - Bug 16](images/TC_FR15_5_3.jpg)
 
 ### Bug 17: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 18: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 19: 
+- **Mô tả Bug:**
+
+- **Test Case liên quan:**
+    - ``
+
+- **Github Issues Link:** 
+- **Ảnh minh chứng (Screenshots):**
+
+### Bug 20: 
 - **Mô tả Bug:**
 
 - **Test Case liên quan:**
