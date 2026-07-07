@@ -57,15 +57,20 @@
 **1. Prompt + Tool**
 - **Tool:** Gemini 3.1 Pro
 - **Timestamp:** 
-- **Prompt:** 
+- **Prompt:** Thiết kế kịch bản kiểm thử (test cases) bằng Kiểm thử Miền (Domain Testing) và Phân tích Giá trị biên (BVA) cho tính năng FR-20: Quản lý hồ sơ cá nhân. Hệ thống gồm các ràng buộc về số ĐT (bắt đầu bằng 0, 10-11 số), các trường read-only (Email) và các hạn chế quyền qua API (ngăn chặn sửa đổi 'role' và IDOR) dựa trên môi trường Mobile/Proxy.
 
-**2. AI Output:** 
+**2. AI Output:** Đã thiết lập 1 bảng phân tích Domain với 9 vùng dữ liệu, 1 bảng BVA chi tiết cho độ dài số điện thoại (từ Min-1 tới Max+1) và trích xuất 10 Test Cases chi tiết bao phủ UI Happy Path, Invalid UI validation, UX của Mobile keyboard và đặc biệt là 3 cases bảo mật API chặn đứng tấn công qua Proxy.
 
-**3. Verdict:** 
+**3. Verdict:** INCOMPLETE
 
 **4. Reasoning:**
+- AI đã xác định đúng các điểm cốt lõi của FR-20 như trạng thái đăng nhập, quyền sở hữu hồ sơ, số điện thoại bắt đầu bằng `0`, độ dài `10-11` chữ số, Email read-only và kiểm tra `role` qua API/Proxy.
+- Tuy nhiên, bộ test vẫn chưa bao phủ hết các lớp tương đương không hợp lệ của số điện thoại. AI vẫn thiên về BVA theo độ dài nên bỏ sót các lớp invalid khác của số điện thoại như chữ cái, khoảng trắng, ký tự đặc biệt và trường hợp rỗng.
+- Kịch bản IDOR sửa `UserID/ProfileID` cũng không phù hợp với hệ thống thật vì backend xác thực bằng JWT, không tin vào định danh do client truyền lên.
 
 **5. Student Fix:**
+- Em đã tinh chỉnh lại bộ test cho FR-20 để bám sát hơn vào bản chất của hệ thống và giao diện thực tế, cụ thể là giữ lại các case BVA cho số điện thoại 10, 11, 9 và 12 chữ số, thêm case kiểm tra `TC_FR20_05: Layout không bị vỡ sau khi thành công thông tin với Họ tên bằng chuỗi 255 ký tự`, `TC_FR20_09: Kiểm tra dữ liệu Địa chỉ giao hàng mặc định được lưu sau khi đăng xuất và đăng nhập lại`. Đồng thời, em chuẩn hóa lại tên nút và bước thao tác theo giao diện thực tế, chuyển thống nhất sang hành động "Cập nhật" và điều chỉnh mô tả expected result cho rõ ràng hơn.
+- Hơn nữa, em loại bỏ kịch bản IDOR/cập nhật chéo tài khoản vì không khả thi với kiến trúc xác thực JWT của hệ thống. Cũng như là bộ test này đã trùng với 1 test case ở FR-04 `TC_FR04_09: Không thể tự ý thay đổi thuộc tính Role`, vì frontend web và mobile đều dùng chung backend, nên nếu dùng Postman để test thêm lần nữa là không có ý nghĩa.
 
 ### Artifact 5: 
 **1. Prompt + Tool**

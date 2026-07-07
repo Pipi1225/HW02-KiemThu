@@ -4,9 +4,9 @@
 ### 1. Phân tích Miền (Domain Analysis)
 | Biến đầu vào / Thuộc tính | Lớp tương đương hợp lệ (Valid) | Lớp tương đương không hợp lệ (Invalid) |
 | :--- | :--- | :--- |
-| **Quyền sở hữu hồ sơ** | Hồ sơ thuộc sở hữu của chính tài khoản đang đăng nhập | Hồ sơ thuộc sở hữu của tài khoản khác |
+| **Quyền sở hữu hồ sơ** | Chỉnh sửa hồ sơ thuộc sở hữu của chính tài khoản đang đăng nhập | Chỉnh sửa hồ sơ của thuộc sở hữu của người dùng khác |
 | **Họ Tên** | Chuỗi ký tự bất kỳ nhập vào | Không có điều kiện loại trừ cụ thể trong context |
-| **Số điện thoại (Đầu số)** | Bắt đầu bằng số `0` | Không bắt đầu bằng số `0` |
+| **Số điện thoại (Đầu số)** | Bắt đầu bằng chữ số `0` | Không bắt đầu bằng số `0` (Ví dụ: 1-9, ký tự đặc biệt) |
 | **Số điện thoại (Ký tự)** | Chỉ chứa các chữ số | Chứa ký tự chữ cái, khoảng trắng hoặc ký tự đặc biệt |
 | **Số điện thoại (Độ dài)** | Độ dài từ 10 đến 11 chữ số | Độ dài < 10 chữ số HOẶC > 11 chữ số |
 | **Địa chỉ giao hàng mặc định**| Chuỗi ký tự bất kỳ nhập vào | Không có điều kiện loại trừ cụ thể trong context |
@@ -104,7 +104,7 @@ Nguyên nhân chính của các thiếu sót này là AI ưu tiên các kiểm t
 | **Giá sản phẩm** (giá trị số)* | 0 | 1 | N/A | N/A |
 
 ### 3. Kịch bản kiểm thử (Test Cases)
-| Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result | Verdict |
+| Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result / Note | Verdict |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **TC_FR15_01** | Sản phẩm mới với Tên sản phẩm ở biên Min (1 ký tự) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: "A" (1 ký tự)<br>2. Nhập Giá: 1000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | - Hệ thống lưu thành công.<br>- Sản phẩm "A" hiển thị trong danh sách với đúng thông tin. | - Hệ thống lưu thành công sản phẩm.<br>- Sản phẩm "A" hiển thị trong danh sách với đúng thông tin. | Pass |
 | **TC_FR15_02** | Sản phẩm mới với Tên sản phẩm ở biên Max (255 ký tự) | Đăng nhập với quyền Admin và đang ở trang Sản phẩm. | 1. Nhập Tên sản phẩm: Chuỗi ngẫu nhiên đúng 255 ký tự<br>2. Nhập Giá: 5000<br>3. Chọn Danh mục hợp lệ<br>4. Nhập URL ảnh hợp lệ (Ví dụ: `https://placehold.co/300x300/png?text=iPhone+15`)<br>5. Nhấn "Lưu sản phẩm" | - Hệ thống lưu thành công.<br>- Sản phẩm hiển thị trong danh sách mà không bị cắt xén tên. | - Hệ thống lưu sản phẩm thành công.<br>- Sản phẩm được hiển thị sau khi thêm vào và không bị cắt xén tên. | Pass |
@@ -133,9 +133,43 @@ Nguyên nhân chính của các thiếu sót này là AI quá thiên về lý th
 
 ## Feature 4: FR-20: Hồ sơ cá nhân (FR-04 - Mobile)
 ### 1. Phân tích Miền (Domain Analysis)
+| Biến đầu vào / Thuộc tính | Lớp tương đương hợp lệ (Valid) | Lớp tương đương không hợp lệ (Invalid) |
+| :--- | :--- | :--- |
+| **Trạng thái đăng nhập** | Người dùng đã đăng nhập (có phiên/token hợp lệ) | Người dùng chưa đăng nhập / Token hết hạn hoặc không hợp lệ |
+| **Quyền sở hữu hồ sơ** | Chỉnh sửa hồ sơ thuộc sở hữu của chính tài khoản đang đăng nhập | Chỉnh sửa hồ sơ của thuộc sở hữu của người dùng khác |
+| **Họ Tên** | Chuỗi ký tự bất kỳ nhập vào | Không có điều kiện loại trừ cụ thể trong context |
+| **Số điện thoại (Đầu số)** | Bắt đầu bằng chữ số `0` | Bắt đầu bằng các chữ số khác `0` (Ví dụ: 1-9, ký tự đặc biệt) |
+| **Số điện thoại (Ký tự)** | Chỉ chứa các chữ số từ `0-9` | Chứa chữ cái, khoảng trắng hoặc ký tự đặc biệt (kiểm tra qua API) |
+| **Số điện thoại (Độ dài)** | Từ 10 đến 11 chữ số | Dưới 10 chữ số hoặc Trên 11 chữ số |
+| **Địa chỉ giao hàng mặc định** | Chuỗi ký tự bất kỳ nhập vào | Không có điều kiện loại trừ cụ thể trong context |
+| **Email** | Ở trạng thái Read-only trên giao diện (UI) | Cố ý chèn/thay đổi giá trị Email trong payload gửi lên API |
+| **Role (Quyền hạn)** | Trạng thái giữ nguyên, không thể thay đổi | Có thể thay đổi giá trị thuộc tính role qua giao diện/request |
 
 ### 2. Phân tích Giá trị biên (Boundary Value Analysis)
+Biến định lượng duy nhất được đề cập trong yêu cầu là **độ dài của số điện thoại** (từ 10 đến 11 chữ số).
+
+| Biến định lượng | Min - 1 | Min | Max | Max + 1 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Độ dài SĐT** | 9 chữ số (Invalid) | 10 chữ số (Valid) | 11 chữ số (Valid) | 12 chữ số (Invalid) |
 
 ### 3. Kịch bản kiểm thử (Test Cases)
+| Test Case ID | Title | Pre-conditions | Steps | Expected Results | Actual Result / Note | Verdict |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **TC_FR20_01** | Cập nhật thành công thông tin với SĐT 10 số (Biên Min) | Người dùng đã đăng nhập vào hệ thống thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Thay đổi Họ Tên và Địa chỉ hợp lệ.<br>2. Nhập SĐT: `0912345678` (10 chữ số, bắt đầu bằng 0).<br>3. Nhấn nút "Cập nhật". | Hệ thống cập nhật thông tin thành công, hiển thị thông báo thành công và dữ liệu mới được lưu lại. | Hệ thống báo lỗi "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." và không cập nhập thông tin. | Fail |
+| **TC_FR20_02** | Cập nhật thành công thông tin với SĐT 11 số (Biên Max) | Người dùng đã đăng nhập vào hệ thống thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Thay đổi Họ Tên và Địa chỉ hợp lệ.<br>2. Nhập SĐT: `01234567890` (11 chữ số, bắt đầu bằng 0).<br>3. Nhấn nút "Cập nhật". | Hệ thống cập nhật thông tin thành công, hiển thị thông báo thành công và dữ liệu mới được lưu lại. | Hệ thống báo lỗi "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." và không cập nhập thông tin. | Fail |
+| **TC_FR20_03** | Báo lỗi khi nhập SĐT có độ dài thấp hơn giới hạn (Biên Min-1) | Người dùng đã đăng nhập thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Nhập các thông tin khác hợp lệ.<br>2. Nhập SĐT: `012345678` (chỉ có 9 chữ số).<br>3. Nhấn nút "Cập nhật". | Hệ thống chặn lại, hiển thị thông báo lỗi: "Số điện thoại phải từ 10 đến 11 chữ số". Dữ liệu không được lưu. | Hệ thống báo lỗi "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." và không cập nhập thông tin. | Fail |
+| **TC_FR20_04** | Báo lỗi khi nhập SĐT có độ dài vượt quá giới hạn (Biên Max+1) | Người dùng đã đăng nhập thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Nhập các thông tin khác hợp lệ.<br>2. Nhập SĐT: `012345678901` (có 12 chữ số).<br>3. Nhấn nút "Cập nhật". | Hệ thống chặn lại, hiển thị thông báo lỗi: "Số điện thoại phải từ 10 đến 11 chữ số". Dữ liệu không được lưu. | Hệ thống báo lỗi "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." và không cập nhập thông tin. | Fail |
+| **TC_FR20_05** | Layout không bị vỡ sau khi thành công thông tin với Họ tên bằng chuỗi 255 ký tự | Người dùng đã đăng nhập thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Nhập các thông tin khác hợp lệ.<br>2. Nhập Họ tên: Chuỗi ngẫu nhiên 255 ký tự.<br>3. Nhấn nút "Cập nhật". | Hệ thống vẫn lưu thông tin, nhưng tên của User sau khi cập nhập có thể được cắt xén đi và không được phép làm vỡ layout. | Hệ thống lưu và cập nhập thông tin, tên User giữ nguyên 255 ký tự, làm vỡ layout, làm khuất đi 1 phần Lịch sử đơn hàng.  | Fail |
+| **TC_FR20_06** | Báo lỗi khi số điện thoại không bắt đầu bằng số 0 | Người dùng đã đăng nhập thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Nhập SĐT: `8912345678` (10 chữ số nhưng bắt đầu bằng số 8).<br>2. Nhấn nút "Cập nhật". | Hệ thống chặn lại, hiển thị thông báo lỗi: "Số điện thoại phải bắt đầu bằng số 0". Dữ liệu không được lưu. | Hệ thống thông báo: "Cập nhập thành công!", thông tin được lưu vào trong hệ thống. | Fail |
+| **TC_FR20_07** | Xác nhận loại bàn phím hiển thị khi chọn ô nhập Số điện thoại (UI/UX) | Ứng dụng di động được chạy trên môi trường Expo/React Native. Người dùng đã đăng nhập. | 1. Chạm vào ô nhập dữ liệu của trường "Số điện thoại". | Bàn phím hệ thống tự động bật lên phải là bàn phím số (Numeric Keyboard), không hiển thị chữ cái. | Bàn phím hệ thống tự động bật lên khi ấn vào là bàn phím số, không hiển thị chữ cái. | Pass |
+| **TC_FR20_08** | Xác nhận trường Email ở trạng thái không thể chỉnh sửa | Người dùng đã đăng nhập thành công và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Quan sát trường Email hiển thị thông tin.<br>2. Cố gắng chạm vào trường Email để kích hoạt con trỏ nhập liệu hoặc chỉnh sửa. | Trường Email hiển thị đúng địa chỉ của tài khoản nhưng ở trạng thái Read-only (vô hiệu hóa chỉnh sửa), không xuất hiện bàn phím. | Không thể chỉnh sửa trường Email dù cho click hay chạm vào trường Email. | Pass |
+| **TC_FR20_09** | Kiểm tra dữ liệu Địa chỉ giao hàng mặc định được lưu sau khi đăng xuất và đăng nhập lại | Người dùng đã đăng nhập thành công, đã nhập Địa chỉ giao hàng mặc định hợp lệ và đang ở màn hình Quản lý hồ sơ cá nhân. | 1. Nhập hoặc cập nhật Địa chỉ giao hàng mặc định với một giá trị hợp lệ.<br>2. Nhấn nút "Cập nhật" và xác nhận hệ thống đã hiển thị thông báo cập nhật thành công.<br>3. Đăng xuất khỏi tài khoản.<br>4. Đăng nhập lại bằng đúng tài khoản vừa cập nhật.<br>5. Mở lại màn hình Quản lý hồ sơ cá nhân và kiểm tra trường Địa chỉ giao hàng mặc định. | Địa chỉ giao hàng mặc định phải được lưu lại đúng giá trị đã nhập trước đó và hiển thị lại sau khi đăng xuất/đăng nhập lại. | Sau khi cập nhật thành công, đăng xuất và đăng nhập lại, trường Địa chỉ giao hàng mặc định bị trống dù trước đó đã nhập dữ liệu. | Fail |
 
 ### 4. AI Gap Analysis
+AI đã nhận diện đúng các phần cốt lõi của FR-20 như trạng thái đăng nhập, quyền sở hữu hồ sơ, SĐT bắt đầu bằng `0`, độ dài `10-11` chữ số và Email ở trạng thái read-only. Tuy nhiên vẫn còn các thiếu sót sau:
+
+1. AI đề xuất kịch bản IDOR/cập nhật chéo tài khoản, nhưng kịch bản này không phù hợp với hệ thống thật vì backend xác thực bằng JWT, không tin vào định danh do client truyền lên. Vì vậy test case bảo mật đó không khả thi trên môi trường hiện tại.
+2. AI chưa bao phủ tốt các hành vi đặc thù của mobile/UI thực tế như layout bị vỡ khi nhập Họ tên rất dài và việc dữ liệu Địa chỉ giao hàng mặc định phải được lưu lại sau khi đăng xuất/đăng nhập lại.
+3. AI chưa đồng nhất hoàn toàn với giao diện thực tế của app, ví dụ tên nút và cách hiển thị trạng thái có thể đúng về mặt ý tưởng nhưng chưa khớp đầy đủ với flow mobile đang dùng.
+
+Nguyên nhân chính của các thiếu sót này là AI ưu tiên suy luận từ mô tả nghiệp vụ và biên độ dữ liệu, trong khi FR-20 lại phụ thuộc thêm vào hành vi của ứng dụng mobile, trạng thái lưu trữ sau đăng nhập và chi tiết kiến trúc xác thực. Bản tinh chỉnh FR-20 đã khắc phục bằng cách bổ sung case kiểm tra layout với Họ tên 255 ký tự, case kiểm tra lưu Địa chỉ giao hàng mặc định sau khi đăng xuất/đăng nhập lại, đồng thời giữ lại các case BVA quan trọng cho SĐT và loại bỏ phần IDOR không khả thi.

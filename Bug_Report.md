@@ -208,38 +208,80 @@ Khi Admin thực hiện cập nhật thông tin (Tên và Giá) của một sả
 ![Screenshot 2 - Bug 16](images/TC_FR15_5_2.jpg)
 ![Screenshot 3 - Bug 16](images/TC_FR15_5_3.jpg)
 
-### Bug 17: 
-- **Mô tả Bug:**
+### Bug 17: Sai logic xác thực độ dài số điện thoại khi cập nhật hồ sơ (Mobile)
+- **Mô tả Bug:** 
+Theo đặc tả hệ thống (FR-20 - FR-04: Quản lý hồ sơ), số điện thoại hợp lệ phải bắt đầu bằng số 0 và có độ dài từ 10 đến 11 chữ số. Tuy nhiên, hệ thống hiện tại đang áp dụng sai quy tắc kiểm tra. Hệ thống liên tục trả về thông báo lỗi: "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số." bất kể người dùng nhập 9, 10, 11 hay 12 số và cả giá trị hợp lệ ở biên Min (10 số, bắt đầu bằng 0) cũng bị chặn. Lỗi này cũng đã báo cáo trên frontend web ở Github Issues #46 (Bug 1).
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR20_01`
+    - `TC_FR20_02`
+    - `TC_FR20_03`
+    - `TC_FR20_04`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/69
 - **Ảnh minh chứng (Screenshots):**
+<br>
+![Screenshot 1 - Bug 17](images/TC_FR20_1_1.jpg)
+![Screenshot 2 - Bug 17](images/TC_FR20_1_2.jpg)
+![Screenshot 3 - Bug 17](images/TC_FR20_1_3.jpg)
+![Screenshot 4 - Bug 17](images/TC_FR20_1_4.jpg)
 
-### Bug 18: 
+### Bug 18: Vỡ layout màn hình Hồ sơ do hiển thị text Họ tên quá dài (Mobile)
 - **Mô tả Bug:**
+Khi người dùng cập nhật Họ tên với một chuỗi ký tự dài (Ví dụ: chạm ngưỡng tối đa 255 ký tự), hệ thống xử lý lưu dữ liệu thành công nhưng giao diện lại khuyết thiếu cơ chế xử lý hiển thị văn bản dài (Text Truncation). Chuỗi Họ tên 255 ký tự được render tràn ra ngoài ranh giới, làm vỡ cấu trúc layout của màn hình và trực tiếp che khuất đi một phần giao diện của khu vực "Lịch sử đơn hàng" bên dưới.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR20_05`
 
-- **Github Issues Link:** 
-- **Ảnh minh chứng (Screenshots):**
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/70
+- **Ảnh minh chứng (Screenshots):** 
+<br>
+![Screenshot 1 - Bug 18](images/TC_FR20_2_1.jpg)
+![Screenshot 2 - Bug 18](images/TC_FR20_2_2.jpg)
 
-### Bug 19: 
+### Bug 19: Hệ thống chấp nhận lưu số điện thoại không bắt đầu bằng số 0 (Mobile)
 - **Mô tả Bug:**
+Theo đặc tả nghiệp vụ (FR-20 - FR-04: Quản lý hồ sơ), một trong những ràng buộc bắt buộc của trường Số điện thoại là phải bắt đầu bằng số 0. Tuy nhiên, hệ thống hiện tại đang khuyết thiếu logic kiểm tra điều kiện này. Người dùng có thể dễ dàng nhập một số điện thoại bắt đầu bằng các chữ số khác (Ví dụ: 8912345678) mà hệ thống vẫn ghi nhận là hợp lệ, trong khi các số điện thoại bắt đầu bằng số 0 thì lại không được. Lỗi này cũng đã báo cáo trên frontend web ở Github Issues #45.
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR20_06`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/71
 - **Ảnh minh chứng (Screenshots):**
+<br>
+![Screenshot 1 - Bug 19](images/TC_FR20_3_1.jpg)
+![Screenshot 2 - Bug 19](images/TC_FR20_3_2.jpg)
 
-### Bug 20: 
+### Bug 20: Mất dữ liệu Địa chỉ giao hàng sau khi phiên đăng nhập kết thúc (Lỗi Fake Success - Mobile)
 - **Mô tả Bug:**
+Hệ thống gặp vấn đề nghiêm trọng trong việc lưu trữ Data đối với trường "Địa chỉ giao hàng mặc định". Khi người dùng cập nhật địa chỉ, ứng dụng thông báo thành công và hiển thị dữ liệu bình thường. Tuy nhiên, nếu người dùng đăng xuất và đăng nhập lại, trường địa chỉ này lại trở về trạng thái trống (dù trước đó trước khi đăng nhập, vào lại trang hồ sơ cá nhân vẫn còn giá trị ở trường địa chỉ).
 
 - **Test Case liên quan:**
-    - ``
+    - `TC_FR20_09`
 
-- **Github Issues Link:** 
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/72
 - **Ảnh minh chứng (Screenshots):**
+<br>
+![Screenshot 1 - Bug 20](images/TC_FR20_4_1.jpg)
+![Screenshot 2 - Bug 20](images/TC_FR20_4_2.jpg)
+![Screenshot 3 - Bug 20](images/TC_FR20_4_3.jpg)
+![Screenshot 4 - Bug 20](images/TC_FR20_4_4.jpg)
+
+### Bug 21: Hiển thị chung một thông báo lỗi sai với độ dài số điện thoại trong đặc tả (Mobile)
+- **Mô tả Bug:**
+Hệ thống xử lý thông báo lỗi đang hoạt động không chính xác về mặt ngữ cảnh. Cụ thể, khi người dùng thao tác nhập liệu tại trường Số điện thoại với các độ dài khác nhau (9 số, 10 số, 11 số, 12 số), hệ thống luôn trả về một thông báo lỗi duy nhất: "Số điện thoại không hợp lệ. Vui lòng nhập đúng 9-10 chữ số".
+Điều này là sai lệch hoàn toàn so với đặc tả (yêu cầu số điện thoại phải từ 10-11 chữ số), khiến người dùng bị điều hướng sai cách nhập liệu. Đáng chú ý, ngay cả khi người dùng nhập đúng độ dài (10 hoặc 11 số), hệ thống vẫn chặn và hiển thị lỗi này.
+
+- **Test Case liên quan:**
+    - `TC_FR20_01`
+    - `TC_FR20_02`
+    - `TC_FR20_03`
+    - `TC_FR20_04`
+
+- **Github Issues Link:** https://github.com/nguyenhieuthuan3105/EShop-Testing-HW02-Group04/issues/73
+- **Ảnh minh chứng (Screenshots):**
+<br>
+![Screenshot 1 - Bug 21](images/TC_FR20_5_1.jpg)
+![Screenshot 2 - Bug 21](images/TC_FR20_5_2.jpg)
+![Screenshot 3 - Bug 21](images/TC_FR20_5_3.jpg)
+![Screenshot 4 - Bug 21](images/TC_FR20_5_4.jpg)
