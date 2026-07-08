@@ -5,6 +5,10 @@
 
 ## AI-generated Artifact
 
+Ở mỗi Artifact khi AI generate ra, mặc dù trong câu prompt cũng như Agent Skill đã có yêu cầu generate thành bảng format .md, nhưng em đều phải prompt thêm 1 lần nhắc AI xuất kết quả thành bảng dạng `.md`.
+
+<br>Em đã sử dụng AI cho những task sau đây:
+
 ### Artifact 1: 
 **1. Prompt + Tool**
 - **Tool:** Gemini 3.1 Pro
@@ -65,41 +69,31 @@
 
 **4. Reasoning:**
 - AI đã xác định đúng các điểm cốt lõi của FR-20 như trạng thái đăng nhập, quyền sở hữu hồ sơ, số điện thoại bắt đầu bằng `0`, độ dài `10-11` chữ số, Email read-only và kiểm tra `role` qua API/Proxy.
-- Tuy nhiên, bộ test vẫn chưa bao phủ hết các lớp tương đương không hợp lệ của số điện thoại. AI vẫn thiên về BVA theo độ dài nên bỏ sót các lớp invalid khác của số điện thoại như chữ cái, khoảng trắng, ký tự đặc biệt và trường hợp rỗng.
+- Tuy nhiên, bộ test vẫn chưa bao phủ hết các miền không hợp lệ của số điện thoại. AI vẫn thiên về BVA theo độ dài nên bỏ sót các lớp invalid khác của số điện thoại như chữ cái, khoảng trắng, ký tự đặc biệt và trường hợp rỗng.
 - Kịch bản IDOR sửa `UserID/ProfileID` cũng không phù hợp với hệ thống thật vì backend xác thực bằng JWT, không tin vào định danh do client truyền lên.
 
 **5. Student Fix:**
 - Em đã tinh chỉnh lại bộ test cho FR-20 để bám sát hơn vào bản chất của hệ thống và giao diện thực tế, cụ thể là giữ lại các case BVA cho số điện thoại 10, 11, 9 và 12 chữ số, thêm case kiểm tra `TC_FR20_05: Layout không bị vỡ sau khi thành công thông tin với Họ tên bằng chuỗi 255 ký tự`, `TC_FR20_09: Kiểm tra dữ liệu Địa chỉ giao hàng mặc định được lưu sau khi đăng xuất và đăng nhập lại`. Đồng thời, em chuẩn hóa lại tên nút và bước thao tác theo giao diện thực tế, chuyển thống nhất sang hành động "Cập nhật" và điều chỉnh mô tả expected result cho rõ ràng hơn.
 - Hơn nữa, em loại bỏ kịch bản IDOR/cập nhật chéo tài khoản vì không khả thi với kiến trúc xác thực JWT của hệ thống. Cũng như là bộ test này đã trùng với 1 test case ở FR-04 `TC_FR04_09: Không thể tự ý thay đổi thuộc tính Role`, vì frontend web và mobile đều dùng chung backend, nên nếu dùng Postman để test thêm lần nữa là không có ý nghĩa.
 
-### Artifact 5: 
-**1. Prompt + Tool**
-- **Tool:** Gemini 3.1 Pro
-- **Timestamp:** 
-- **Prompt:** 
-
-**2. AI Output:** 
-
-**3. Verdict:** 
-
-**4. Reasoning:**
-
-**5. Student Fix:**
-
 ## Đánh giá & Kết luận
 
 ### Đánh giá độ chính xác của AI
-* **VALID: 0/0 (0%)** 
+* **VALID: 0/4 (0%)**
   *()*
-* **INCOMPLETE: 0/0 (0%)** 
-  *()*.
-* **INVALID: 0/0 (0%)**
+* **INCOMPLETE: 4/4 (100%)**
+  *(Artifact 1, Artifact 2, Artifact 3, Artifact 4).*
+* **INVALID: 0/4 (0%)**
   *()*
 
 ### Kết luận
 Thông qua quá trình thực hiện bài tập và đối chiếu kết quả, em rút ra kết luận về việc ứng dụng AI như sau:
 **Khi nào nên dùng AI:**
-1. 
+1. Khi cần tạo nhanh bộ khung test case ban đầu, bảng Domain/BVA hoặc danh sách các hướng kiểm thử cơ bản.
+2. Khi cần gợi ý thêm các edge cases phổ biến để tránh bỏ sót ở bước đầu.
+3. Khi cần hỗ trợ diễn đạt lại test steps, chuẩn hóa cách trình bày, hoặc hệ thống hóa nội dung báo cáo.
 
 **Khi nào không nên dùng AI:**
-1. 
+1. Khi cần bộ test hoàn chỉnh và chính xác tuyệt đối theo đặc tả, vì AI vẫn có thể bỏ sót các miền hoặc BVA quan trọng.
+2. Khi kiểm thử phụ thuộc vào kiến trúc triển khai thực tế như JWT, quyền truy cập, hoặc luồng API không thể suy diễn chỉ từ prompt.
+3. Khi giao diện và source code có khác biệt với mô tả nghiệp vụ, vì AI dễ tạo test steps chung chung hoặc dựa quá nhiều vào giả định.
