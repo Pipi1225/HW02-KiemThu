@@ -5,8 +5,6 @@
 
 ---
 
-## Feature 1: FR-04: Quản lý hồ sơ cá nhân
-
 ### Bug 1: Sai logic xác thực độ dài số điện thoại khi cập nhật hồ sơ (Đặc tả nhận 10-11 số, thực tế chỉ nhận 9-10 số)
 - **Mô tả Bug:**
 Theo đặc tả hệ thống (FR-04), số điện thoại hợp lệ phải có độ dài từ 10 đến 11 chữ số. Tuy nhiên, hiện tại hệ thống chỉ chấp nhận SĐT từ 9 đến 10 chữ số và hiển thị thông báo lỗi không chính xác từ đó dẫn đến việc người dùng không thể cập nhật SĐT hợp lệ có 11 số, và SĐT 10 số cũng bị bắt lỗi một cách bất thường.
